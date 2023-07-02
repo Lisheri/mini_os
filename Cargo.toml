@@ -1,0 +1,15 @@
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+
+[package]
+name = "blog_os"
+version = "0.1.0"
+authors = ["LisherMo <496585585@qq.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
