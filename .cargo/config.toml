@@ -7,3 +7,17 @@ rustflags = ["-C", "link-args=/ENTRY:_start /SUBSYSTEM:console"]
 
 [target.'cfg(target_os = "macos")']
 rustflags = ["-C", "link-args=-e __start -static -nostartfiles"]
+
+# 按照需要重编译core等标准crate, 而不需要使用Rust安装程序内置的预编译版本
+[unstable]
+# 告知 cargo 需要重新编译 core和 compiler_builtins 这两个 crate, 其中 compiler_builtins 是 core的必要依赖项
+# 不过重编译需要提供源码, 可以使用 rsutup component add rust-src 来下载
+# 配置完成后, 在执行 cargo build 之后， core、rustc-std-workspace-core （compiler_builtins 的依赖）和 compiler_builtins crate被重新编译了。
+build-std=["core", "compiler_builtins"]
+# compiler-builtins-mem 启用了 mem特性 https://github.com/rust-lang/compiler-builtins/blob/eff506cd49b637f1ab5931625a33cef7e91fbbf6/Cargo.toml#L54-L55
+# 本质上还是通过 #[no_mangle] 向链接器提供了 memcpy 等函数的实现
+build-std-fetures=["compiler-builtins-mem"]
+
+[build]
+# 设置默认编译目标
+target = "x86_64-blog_os.json"
